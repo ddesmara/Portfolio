@@ -1,4 +1,4 @@
-USE BMGT402_DB_Student_110
+USE Bagel_Barn_Data
 
 DROP TABLE OrdersProj;
 DROP TABLE GoodsProj;
