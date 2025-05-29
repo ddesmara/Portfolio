@@ -50,7 +50,6 @@ It will help Bagel Barn:
 
 ![1](https://github.com/ddesmara/Portfolio/blob/766d15133b5494c517c89586bc71d6d27708365d/Bagel_Barn_Analysis/Images/ddbb_erd.png)
 
-![2](Bagel_Barn_Analysis/Images/ddbb_erd.png)
 ### Relational Schema
 
 **Orders**  
@@ -71,72 +70,145 @@ It will help Bagel Barn:
 **Equipment**  
 `(EquipmentID, EquipmentName, SupplierID, DateInstalled, EquipmentPrice, DateRetired)`
 
+![2](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_relational_schema.png)
+
 ---
 
 ## Analysis Stage – SQL Queries & Business Questions
 
-### Sample Table Queries
+### SQL Table Creation (DDL)
 
-- View all customers:  
-  `SELECT * FROM Customers;`
-
-- View all suppliers:  
-  `SELECT * FROM Suppliers;`
-
-- View all goods:  
-  `SELECT * FROM Goods;`
-
-- View all ingredients:  
-  `SELECT * FROM Ingredients;`
-
-- View all equipment:  
-  `SELECT * FROM Equipment;`
-
-- View all orders:  
-  `SELECT * FROM Orders;`
+```sql
+CREATE TABLE CustomersProj( 
+CustomerID CHAR(10) NOT NULL,
+CustomerName VARCHAR(30),
+MemberStatus CHAR(1),
+DateJoined DATE,
+CustomerAge VARCHAR(3),
+CustomerAddress VARCHAR(50),
+CustomerCity VARCHAR(50),
+CustomerState CHAR(2),
+CustomerZip CHAR(5),
+CONSTRAINT pk_CustomerID PRIMARY KEY(CustomerID));
+```
+![Customers Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_customers_table.png)
+```sql
+CREATE TABLE SuppliersProj( 
+SupplierID CHAR(3) NOT NULL,
+SupplierName VARCHAR(30),
+DatePartnered DATE,
+SupplierAddress VARCHAR(50),
+SupplierCity VARCHAR(50),
+SupplierState CHAR(2),
+SupplierZip CHAR(5),
+CONSTRAINT pk_SupplierID PRIMARY KEY(SupplierID));
+```
+![Suppliers Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_suppliers.png)
+```sql
+CREATE TABLE GoodsProj( 
+GoodID CHAR(3) NOT NULL,
+GoodName VARCHAR(30), 
+GoodPrice NUMERIC(6,2), 
+CONSTRAINT pk_GoodID PRIMARY KEY(GoodID));
+```
+![Goods Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_goods.png)
+```sql
+CREATE TABLE EquipmentProj( 
+EquipmentID CHAR(3) NOT NULL,
+SupplierID CHAR(3) NOT NULL,
+EquipmentName VARCHAR(30),
+DateInstalled DATE,
+EquipmentPrice NUMERIC(9,2),
+DateRetired Date, 
+CONSTRAINT pk_EquipmentID PRIMARY KEY(EquipmentID),
+CONSTRAINT f1k_SupplierID FOREIGN KEY(SupplierID) REFERENCES SuppliersProj(SupplierID));
+```
+![Equipment Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_equipment.png)
+```sql
+CREATE TABLE IngredientsProj( 
+IngredientID CHAR(3) NOT NULL,
+SupplierID CHAR(3) NOT NULL,
+IngredientName VARCHAR(30),
+DatePurchased DATE,
+DateDepleted DATE,
+ExpirationDate Date,
+IngredientQuantity Numeric(8,0),
+CONSTRAINT pk_IngredientID PRIMARY KEY(IngredientID),
+CONSTRAINT fk2_SupplierID FOREIGN KEY(SupplierID) REFERENCES SuppliersProj(SupplierID));
+```
+![Ingredients Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_ingredients.png)
+```sql
+CREATE TABLE OrdersProj(
+OrderID CHAR(10) NOT NULL, 
+GoodID CHAR(3) NOT NULL, 
+CustomerID CHAR(10) NOT NULL, 
+OrderPrice NUMERIC(6,2), 
+OrderDate DATETIME,
+CONSTRAINT pk_OrderID PRIMARY KEY(OrderID),
+CONSTRAINT fk_GoodID FOREIGN KEY(GoodID) REFERENCES GoodsProj(GoodID),
+CONSTRAINT fk_CustomerID FOREIGN KEY(CustomerID) REFERENCES CustomersProj(CustomerID));
+```
+![Orders Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_orders.png)
 
 ---
 
-### Business Analysis Statements
+### Business Analysis Statements (DML)
 
-1. **What’s the frequency and average price of goods ordered in summer (June, July, August) 2022?**  
-   `SELECT GoodName, COUNT(*) AS OrderCount, AVG(OrderPrice) AS AvgPrice  
-   FROM Orders  
-   JOIN Goods ON Orders.GoodID = Goods.GoodID  
-   WHERE MONTH(OrderDate) IN (6, 7, 8) AND YEAR(OrderDate) = 2022  
-   GROUP BY GoodName;`
+1. **What’s the frequency and average price of goods ordered in the Summer (June, July, August) 2022?**  
+```sql
+SELECT GoodName, COUNT(GoodName) AS NumberOrdered, AVG(AveragePrice) AS AveragePrice FROM PopularSummerGoodsView
+WHERE OrderDate >= '2022-06-01' AND OrderDate <= '2022-08-31'
+GROUP BY GoodName, AveragePrice
+ORDER BY NumberOrdered DESC;
+```
+![1](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_goods_view_table.png)
 
-2. **Which people became members in summer 2021?**  
-   `SELECT * FROM Customers  
-   WHERE MemberStatus = 'Yes'  
-   AND MONTH(DateJoined) IN (6, 7, 8)  
-   AND YEAR(DateJoined) = 2021;`
+From this table, we can determine that Buttered Toast was ordered the most throughout the Summer of 2022 and that the average price was $3.99.
 
-3. **What are the top customers by number of orders so far this month (April 2022)?**  
-   `SELECT CustomerID, COUNT(*) AS TotalOrders  
-   FROM Orders  
-   WHERE MONTH(OrderDate) = 4 AND YEAR(OrderDate) = 2022  
-   GROUP BY CustomerID  
-   ORDER BY TotalOrders DESC  
-   LIMIT 5;`
+2. **Which customers became members in summer 2021?**  
+```sql
+SELECT CustomerName, DateJoined
+FROM CustomersProj
+WHERE DateJoined >= '2021-06-01' AND DateJoined <= '2021-08-31'
+ORDER BY DateJoined;
+```
+![2](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_members_table.png)
 
-4. **What are the three suppliers with the longest relationship with Bagel Barn and Deli?**  
-   `SELECT SupplierName, DatePartnered  
-   FROM Suppliers  
-   ORDER BY DatePartnered ASC  
-   LIMIT 3;`
+Using SQL, we are able to pull all the customers that became members in 2021, identify their full name and the exact date they joined.
 
-5. **Which suppliers provided the top 3 quantities of ingredients?**  
-   `SELECT SupplierID, SUM(IngredientQuantity) AS TotalSupplied  
-   FROM Ingredients  
-   GROUP BY SupplierID  
-   ORDER BY TotalSupplied DESC  
-   LIMIT 3;`
+3. **Who are the top customers by number of orders so far this month (April 2022)?**  
+```sql
+SELECT c.CustomerName, COUNT(o.GoodID) as NumberOrders
+FROM CustomersProj c, OrdersProj o
+WHERE c.customerID = o.customerID
+GROUP BY c.CustomerName, o.OrderDate
+HAVING o.OrderDate >= '2022-04-01 13:00:00' AND o.OrderDate <= '2022-04-24 23:59:59';
+```
+![3](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_members_table.png)
 
-6. **Which equipment were installed over 5 years ago?**  
-   `SELECT EquipmentName, DateInstalled  
-   FROM Equipment  
-   WHERE DateInstalled <= DATE_SUB(CURDATE(), INTERVAL 5 YEAR);`
+5. **Who are the three suppliers with the longest relationship with Bagel Barn and Deli?**  
+```sql
+SELECT TOP 3 * FROM SuppliersProj
+ORDER BY DatePartnered;
+```
+![4](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_topsuppliers_table.png)
+
+6. **Which suppliers provided the top 3 quantities of ingredients?**  
+```sql
+SELECT DISTINCT TOP 3 s.SupplierName, i.IngredientQuantity
+FROM SuppliersProj s, IngredientsProj i
+WHERE s.SupplierID = i.SupplierID
+ORDER BY i.IngredientQuantity DESC;
+```
+![5](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_topingred_table.png)
+
+7. **What equipments were installed over 5 years ago?**  
+```sql
+SELECT *
+FROM EquipmentProj
+WHERE DATEDIFF(YEAR, DateInstalled, GetDate()) > 5
+```
+![6](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_oldequip_table.png) 
 
 ---
 
@@ -151,7 +223,7 @@ It will help Bagel Barn:
 
 ---
 
-## Closing Statement
+## Con
 
 The Bagel Barn database project demonstrates how structured relational databases and SQL queries can transform business operations in small food service environments.
 
