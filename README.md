@@ -20,7 +20,7 @@ Here’s a collection of projects showcasing my experience and technical skills 
 ### SQL Projects
 
 #### **Bagel Barn Inventory & Sales Database**
-- Code: [`Project402_0101_2_SQL.sql`](link)  
+- Code: [`Bagel_Barn_Analysis.sql`](link)  
 - **Goal:** Design and query a relational database to uncover sales trends, top customers, and supplier insights for a fictional café.
 - **Skills:** DDL, DML, Views, Aggregations, JOINS  
 - **Technology:** SQL Server  
