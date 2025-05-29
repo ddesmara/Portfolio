@@ -1,0 +1,250 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("factoextra")
+#install.packages("kableExtra")
+
+```
+Load Packages
+```{r}
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+library(factoextra)
+library(pacman)
+p_load(tidyverse,vegan,caret)
+library(kableExtra)
+```
+Load Dataset
+```{r}
+Happy <-read.csv("/Users/dominiquedesmarattes/Documents/Senior Year School Docs/BMGT431/Group_Project/World_Happiness_Report_2022.csv", header=T)
+```
+Remove all columns that are not the 6 factors we're focusing on
+```{r}
+Happy <- Happy[,-c(1,3:6) ]
+```
+Rename Columns
+```{r}
+Happy <- Happy%>%
+  rename(
+    GDP = 'Explained.by..GDP.per.capita',
+    Social.Support = 'Explained.by..Social.support',
+    Life.Expectancy = 'Explained.by..Healthy.life.expectancy',
+    Free.Choices = 'Explained.by..Freedom.to.make.life.choices',
+    Generosity = 'Explained.by..Generosity',
+    Corruption = 'Explained.by..Perceptions.of.corruption'
+  )
+```
+##Hierarchical Clustering
+Step 1: Normalizing
+```{r}
+#convert to a data frame for step 2 (row names)
+Train.norm <- as.data.frame(Happy)
+
+# use preProcess() from the caret package to normalize the data
+norm.values <- preProcess(Happy[, 2:7], method=c("center", "scale"))
+
+#We then use the norm.values to scale both the training and the validation data
+Train.norm[, 2:7] <- predict(norm.values, Train.norm[, 2:7])
+
+summary(Train.norm)
+
+```
+Step 2: Make the Country names the row names
+```{r}
+# set row names to the university column
+row.names(Train.norm) <- Train.norm[,1] 
+
+#drop Universities from the data
+Train.norm <- Train.norm[,-1]
+
+```
+We utilize the hclust() function for the clustering. the hclust method needs a distance matrix and a cluster function as argument.
+```{r}
+#create the distance matrix
+d <- dist(Train.norm, method = "euclidean")
+
+#run the clustering
+hc2 <- hclust(d, method = "average")
+plot(hc2, hang = -1, ann = FALSE)
+
+groups <- cutree(hc2, k=4) # cut tree into 12 clusters
+# draw dendogram with red borders around the 12 clusters
+rect.hclust(hc2, k=4, border="red") 
+```
+Finally, lets get a list of membership
+```{r}
+cutree(hc2, k = 4)
+```
+Add in the membership and summarize clusters
+```{r}
+#combine cluster membership with the orignial data
+Happy <-cbind(Happy,clusterNum=cutree(hc2,k=4))
+
+#summarize the data
+Happy %>% group_by(clusterNum) %>% summarize(
+  AvgGDP=mean(GDP),
+  AvgSS=mean(Social.Support),
+  AvgLE=mean(Life.Expectancy),
+  AvgF=mean(Free.Choices),
+  AvgG=mean(Generosity),
+  AvgC=mean(Corruption)
+)
+```
+##Kmeans Clustering
+Step 1: Normalizing
+```{r}
+#convert to a data frame for step 2 (row names)
+Train.norm <- as.data.frame(Happy)
+
+# use preProcess() from the caret package to normalize the data
+norm.values <- preProcess(Happy[, 2:7], method=c("center", "scale"))
+
+#We then use the norm.values to scale both the training and the validation data
+Train.norm[, 2:7] <- predict(norm.values, Train.norm[, 2:7])
+
+summary(Train.norm)
+
+```
+Step 2: Make the Country names the row names
+```{r}
+# set row names to the university column
+row.names(Train.norm) <- Train.norm[,1] 
+
+#drop Universities from the data
+Train.norm <- Train.norm[,-1]
+```
+Step 3: Run the clustering
+```{r}
+km <- kmeans(Train.norm, 4, nstart = 25)
+```
+Step 4: Characterize the clusters
+```{r}
+km_cluster <- km$cluster
+#number of records in each cluster
+km$size
+#total distance between records in each cluster
+km$withinss
+#table of cluster centers of each cluster for each of the 6 factors of happiness 
+km$centers
+```
+Step 5: List Clusters as Dataframe
+```{r}
+## list of cluster assignments
+km_cluster <- order(km$cluster)
+clusters <- data.frame(km$cluster[km_cluster])
+
+```
+Step 6: Visualize the output 
+```{r}
+#for easier reproducibility
+MyNumClusters=4;
+MyNumVariables=6;
+
+# plot an empty scatter plot
+plot(c(0), xaxt = 'n', ylab = "", type = "l", 
+     ylim = c(min(km$centers), max(km$centers)), xlim = c(0, MyNumVariables))
+
+# label x-axes
+axis(1, at = c(1:MyNumVariables), labels = names(Train.norm))
+
+# plot centroids (note if you are using more than eight cluster you need to extend the if statement)
+for (i in c(1:MyNumClusters))
+lines(km$centers[i,], lty = i, lwd = 2, col = ifelse(i %in% c(1, 3, 5, 7),
+                            "black", "dark grey"))
+
+# name clusters
+text(x = 0.5, y = km$centers[, 1], labels = paste("Cluster", c(1:MyNumClusters)))
+```
+Step 5: Determine right k
+```{r}
+#Note that tot.withinss gives us the total within-cluster sum of squares, i.e. sum(withinss).
+
+# Compute and plot wss for k = 1 to k = 15
+k.values <- 1:15
+wss_values<-c()
+
+# extract wss for 2-15 clusters
+for (i in 1:15){ 
+  wss_values[i] <-kmeans(Train.norm, i, nstart = 10 )$tot.withinss
+}
+
+plot(k.values, wss_values,
+       type="b", pch = 19, frame = FALSE, 
+       xlab="Number of clusters K",
+       ylab="Total within-clusters sum of squares")
+```
+
+```{r}
+fviz_nbclust(Train.norm, kmeans, method = "wss", k.max = 15)
+```
+
+```{r}
+fviz_cluster(km, data = Train.norm)
+```
+
+```{r}
+Train.norm %>%
+  mutate(Cluster = km$cluster) %>%
+  group_by(Cluster) %>%
+  summarise_all("mean")
+```
+Add in the membership and summarize clusters
+```{r}
+#combine cluster membership with the orignial data
+Happy <-cbind(Happy,km$cluster)
+```
+Rename km$clusters column
+```{r}
+Happy <- Happy%>%
+  rename(
+    Cluster = 'km$cluster')
+```
+Create Pivot Table in Excel
+```{r}
+#to analyze in Excel, we export the information 
+write.csv(Happy,"Happy.csv", row.names = FALSE)
+```
+Create Pivot Table in R
+```{r}
+#summarize the data
+Happy_Table <- Happy %>% group_by(Cluster) %>% summarize(
+  AvgGDP=mean(GDP),
+  AvgSS=mean(Social.Support),
+  AvgLE=mean(Life.Expectancy),
+  AvgF=mean(Free.Choices),
+  AvgG=mean(Generosity),
+  AvgC=mean(Corruption)
+)
+```
+
+```{r}
+write.csv(Happy_Table,"Happy_Pivot_Table.csv", row.names = FALSE)
+```
+
+```{r}
+Happy2 <-read.csv("/Users/dominiquedesmarattes/Documents/Senior Year School Docs/BMGT431/Group_Project/World_Happiness_Report_2022.csv", header=T)
+```
+
+```{r}
+Rank <- Happy %>% 
+  cbind(Happy,Happy2$RANK)
+```
+
+```{r}
+Rank <- Rank[,c(16,17) ]
+```
+
+
+```{r}
+Rank <- Rank%>%
+  rename(
+    Rank = 'Happy2$RANK')
+```
+
