@@ -22,7 +22,8 @@ Here’s a collection of projects showcasing my experience and technical skills 
 #### **Bagel Barn Inventory & Sales Database**
 - Code: <a href="https://github.com/ddesmara/Portfolio/blob/9dec2e3ed852ed7afc928e4a0405697dd614bfc0/Bagel_Barn_Analysis/Bagel_Barn_Analysis.sql" target="_blank">
 Bagel_Barn_Analysis.sql
-</a> 
+</a>
+
 - **Goal:** Design and query a relational database to uncover sales trends, top customers, and supplier insights for a fictional café.
 - **Skills:** DDL, DML, Views, Aggregations, JOINS  
 - **Technology:** SQL Server  
