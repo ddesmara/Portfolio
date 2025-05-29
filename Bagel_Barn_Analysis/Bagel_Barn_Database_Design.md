@@ -50,6 +50,7 @@ It will help Bagel Barn:
 
 ![1](https://github.com/ddesmara/Portfolio/blob/766d15133b5494c517c89586bc71d6d27708365d/Bagel_Barn_Analysis/Images/ddbb_erd.png)
 
+![2](Bagel_Barn_Analysis/Images/ddbb_erd.png)
 ### Relational Schema
 
 **Orders**  
