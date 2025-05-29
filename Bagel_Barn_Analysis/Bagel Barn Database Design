@@ -1,0 +1,59 @@
+##Bagel Barn Database Design
+
+Agenda
+-Background Information/ Planning Stage
+-ERD & Relational Schema / Design Stage
+-SQL Queries/ Analysis Stage
+-Tableau/ Analysis Stage
+
+-Planning
+  Client, Mission Statement + Objectives
+Mission Statement
+The purpose of the database system is to track inventory and orders of our Bagel Barn’s deli in Princeton, New Jersey.
+
+Through our analysis, Bagel Barn will be able to understand how to go about:
+Selling their goods by looking at seasonal trends in their data.
+Altering their menu to account for the popularity and relevance of their items over time.
+Order inventory (ingredients) at the most optimal times to prevent food spoilage from lack of use.
+Determining which suppliers to maintain relationships with and which to terminate relationships with.
+Determining when to upgrade equipment.
+Understanding customer preferences.
+
+Mission Objectives
+
+Create a database that has the tables: Orders, Customers, Suppliers, Goods, Ingredients, and Equipment.
+Track inflow and outflow of ingredients and goods in stock.
+Track how much of the ingredients and equipment are provided by each supplier.
+Monitor good popularity and order frequency.
+Report top 3 customers, suppliers, and goods based on quantity over the same year (seasonality).
+Monitor the typical (average) shelf life of various ingredients.
+
+-Design
+  ERD + Relational Schema
+Entity Relationship Diagram
+*3 Images with comments on primary and secondary keys, relations, etc*
+
+Relational Schema
+
+Orders(OrderID, GoodID[1..25], CustomerID, OrderPrice, OrderDate)
+Customers(CustomerID, CustomerName, MemberStatus, DateJoined, CustomerAge, CustomerAddress, CustomerCity, CustomerState, CustomerZip)
+Suppliers(SupplierID, SupplierName, DatePartnered, SupplierAddress, SupplierCity, SupplierState, SupplierZip)
+Goods(GoodID, GoodName, GoodPrice)
+Ingredients(IngredientID, /SupplierID/, IngredientName, DatePurchased, DateDepleted, ExpirationDate, IngredientQuantity)
+Equipment(EquipmentID, EquipmentName, /SupplierID/, DateInstalled, EquipmentPrice, DateRetired)
+
+
+-Analysis
+  SQL + Tableau
+SQL Queries and Tables
+Tables *Insert Images and comments*
+
+
+Business Statements *Images*
+
+Tableau Visualziation
+Questions and Images
+
+Closing Statement##
+
+
