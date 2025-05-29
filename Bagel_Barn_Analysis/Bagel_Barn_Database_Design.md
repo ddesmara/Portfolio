@@ -48,7 +48,7 @@ It will help Bagel Barn:
 
 ### Entity Relationship Diagram (ERD)
 
-![1](Bagel_Barn_Analysis/Images/ddbb_erd.png)
+![1](/Images/ddbb_erd.png)
 
 ### Relational Schema
 
