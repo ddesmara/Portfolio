@@ -1,6 +1,6 @@
 # Bagel Barn Database Design (SQL Portfolio Project)
 
-Welcome to my SQL portfolio project — a full-cycle database design and analysis case study for **Bagel Barn & Deli**, a local deli in Princeton, New Jersey.
+Welcome to my SQL portfolio project, a database design and analysis case study for **Bagel Barn & Deli**, a local deli in Princeton, New Jersey.
 
 ---
 
@@ -48,7 +48,7 @@ It will help Bagel Barn:
 
 ### Entity Relationship Diagram (ERD)
 
-*Insert ERD image(s) here with labeled keys and relationships.*
+![Alt Text](relative/or/full/path/to/image.png)
 
 ### Relational Schema
 
