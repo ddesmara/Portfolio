@@ -1,6 +1,7 @@
 # Bagel Barn Database Design (SQL Portfolio Project)
 
-Welcome to my SQL portfolio project, a database design and analysis case study for **Bagel Barn & Deli**, a local deli in Princeton, New Jersey.
+
+This project is a collaborative database design and analysis case study for **Bagel Barn & Deli**, a local deli in Princeton, New Jersey. As a team, we designed a relational database to track inventory, analyze order data, and generate actionable business insights. The project included developing an Entity Relationship Diagram (ERD), writing SQL queries for data analysis, and creating visualizations using Tableau.
 
 ---
 
@@ -223,17 +224,19 @@ WHERE DATEDIFF(YEAR, DateInstalled, GetDate()) > 5
 
 ---
 
-## Con
+## Key Takeaways & Final Thoughts
 
-The Bagel Barn database project demonstrates how structured relational databases and SQL queries can transform business operations in small food service environments.
+The Bagel Barn database project showcases how structured relational databases and SQL-driven analysis can enhance operations in small food service businesses.
 
-Using SQL and Tableau, Bagel Barn can now:
+With the implementation of SQL and Tableau, Bagel Barn is now able to:
 
-- Track trends and identify seasonal changes in customer behavior  
-- Optimize inventory management and prevent spoilage  
-- Evaluate supplier effectiveness based on quantity and reliability  
-- Gain insight into product performance  
-- Improve decision-making across operations  
+- Identify seasonal trends and shifts in customer behavior  
+- Optimize inventory management and reduce food waste  
+- Assess supplier performance based on quantity and consistency  
+- Understand product popularity and sales performance  
+- Make data-informed decisions across various aspects of the business  
+
+Through this project, our team gained hands-on experience in end-to-end database development, from data modeling and SQL querying to translating insights into meaningful visualizations. The analysis supports Bagel Barn’s operational goals while demonstrating the power of data to inform decisions around menu planning, supplier relationships, and resource allocation.
 
 ### Tools Used
 
@@ -241,5 +244,3 @@ Using SQL and Tableau, Bagel Barn can now:
 - Relational Database Design  
 - Tableau for Data Visualization  
 - ERD & Schema Planning  
-
-Thanks for reviewing this project! I hope you enjoyed the insights derived from Bagel Barns' data!
