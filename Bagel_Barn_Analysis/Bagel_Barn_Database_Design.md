@@ -159,8 +159,6 @@ ORDER BY NumberOrdered DESC;
 ```
 ![1](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_goods_view_table.png)
 
-From this table, we can determine that Buttered Toast was ordered the most throughout the Summer of 2022 and that the average price was $3.99.
-
 2. **Which customers became members in summer 2021?**  
 ```sql
 SELECT CustomerName, DateJoined
@@ -169,8 +167,6 @@ WHERE DateJoined >= '2021-06-01' AND DateJoined <= '2021-08-31'
 ORDER BY DateJoined;
 ```
 ![2](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_members_table.png)
-
-Using SQL, we are able to pull all the customers that became members in 2021, identify their full name and the exact date they joined.
 
 3. **Who are the top customers by number of orders so far this month (April 2022)?**  
 ```sql
