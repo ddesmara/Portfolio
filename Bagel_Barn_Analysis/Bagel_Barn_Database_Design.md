@@ -3,7 +3,6 @@
 
 This project is a collaborative database design and analysis case study for **Bagel Barn & Deli**, a local deli in Princeton, New Jersey. As a team, we designed a relational database to track inventory, analyze order data, and generate actionable business insights. The project included developing an Entity Relationship Diagram (ERD), writing SQL queries for data analysis, and creating visualizations using Tableau.
 
----
 
 ## Agenda
 
@@ -11,9 +10,8 @@ This project is a collaborative database design and analysis case study for **Ba
 2. **Design Stage** – ERD & Relational Schema  
 3. **Analysis Stage** – SQL Queries  
 4. **Visualization Stage** – Tableau Dashboards  
-5. **Closing Statement**
+5. **Key Takeaways & Final Thoughts**
 
----
 
 ## Planning Stage
 
@@ -43,7 +41,6 @@ It will help Bagel Barn:
 - Report top 3 customers, goods, and suppliers (seasonal view)  
 - Monitor average ingredient shelf life  
 
----
 
 ## Design Stage
 
@@ -73,7 +70,6 @@ It will help Bagel Barn:
 
 ![2](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_relational_schema.png)
 
----
 
 ## Analysis Stage – SQL Queries & Business Questions
 
@@ -151,7 +147,6 @@ CONSTRAINT fk_CustomerID FOREIGN KEY(CustomerID) REFERENCES CustomersProj(Custom
 ```
 ![Orders Table](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_orders.png)
 
----
 
 ### Business Analysis Statements (DML)
 
@@ -211,22 +206,21 @@ WHERE DATEDIFF(YEAR, DateInstalled, GetDate()) > 5
 ```
 ![6](https://github.com/ddesmara/Portfolio/blob/aae579098e7493e1dbdbb025bc5c0942dbf4b421/Bagel_Barn_Analysis/Images/ddbb_oldequip_table.png) 
 
----
 
 ## Tableau Visualization Stage
 
-*Insert Tableau dashboards, links, or screenshots here.*
+1. **Goods Ordered** – Frequency & Average Price (Summer 2022)
 
-- **Goods Ordered** – Frequency & Average Price (Summer 2022)  
-- **New Members** – Total People Joined (Summer 2021)  
-- **Top Customers, Suppliers, and Goods** – Seasonal Trends  
-- **Equipment Lifetime** – Age of Equipment Currently in Use  
+![7](https://github.com/ddesmara/SQL-Portfolio/blob/5bdde53894493cf99e2754802ad855d344ed2bd5/Bagel_Barn_Analysis/Images/ddbb_freq_tableau.png)
 
----
+![8](https://github.com/ddesmara/SQL-Portfolio/blob/5bdde53894493cf99e2754802ad855d344ed2bd5/Bagel_Barn_Analysis/Images/ddbb_avg_tableau.png)
+ 
+2. **New Members** – Total People Joined (Summer 2021)  
+
+![9](https://github.com/ddesmara/SQL-Portfolio/blob/5bdde53894493cf99e2754802ad855d344ed2bd5/Bagel_Barn_Analysis/Images/ddbb_members_tableau.png)
+
 
 ## Key Takeaways & Final Thoughts
-
-The Bagel Barn database project showcases how structured relational databases and SQL-driven analysis can enhance operations in small food service businesses.
 
 With the implementation of SQL and Tableau, Bagel Barn is now able to:
 
@@ -238,9 +232,3 @@ With the implementation of SQL and Tableau, Bagel Barn is now able to:
 
 Through this project, our team gained hands-on experience in end-to-end database development, from data modeling and SQL querying to translating insights into meaningful visualizations. The analysis supports Bagel Barn’s operational goals while demonstrating the power of data to inform decisions around menu planning, supplier relationships, and resource allocation.
 
-### Tools Used
-
-- SQL (Microsoft SQL Server)  
-- Relational Database Design  
-- Tableau for Data Visualization  
-- ERD & Schema Planning  
